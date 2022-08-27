@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d700b8704864c4e429781977d9ff4573, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  popUp: {fileID: 7543169032060446596, guid: a456f0aa887bf28418d30341492517f0, type: 3}
   keys:
   - w
   - a

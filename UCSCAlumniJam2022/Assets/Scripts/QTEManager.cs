@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class QTEManager : MonoBehaviour
 {
+    public GameObject popUp;
     public string[] keys = {"w", "a", "s", "d", "i", "j", "k", "l"};
     public bool inQTE = false;
     public string currentKey;
@@ -12,6 +13,7 @@ public class QTEManager : MonoBehaviour
     public float activeCooldown;
 
     private Coroutine qte;
+    private GameObject currentPopup;
 
     void Start()
     {
@@ -27,6 +29,8 @@ public class QTEManager : MonoBehaviour
             inQTE = true;
             currentKey = SelectKey();
             Debug.Log(currentKey);
+            currentPopup = Instantiate(popUp, transform.position, transform.rotation, transform);
+            currentPopup.GetComponent<Popup>().SetUp(currentKey);
             qte = StartCoroutine(RunQTE());
         }
 
@@ -48,12 +52,12 @@ public class QTEManager : MonoBehaviour
         {
             StopCoroutine(qte);
             Debug.Log("QTE SUCCESS!");
-            EndQTE();
+            EndQTE(true);
         } else
         {
             StopCoroutine(qte);
             Debug.Log("QTE FAILED! (Wrong Key)");
-            EndQTE();
+            EndQTE(false);
         }
     }
 
@@ -62,13 +66,21 @@ public class QTEManager : MonoBehaviour
     {
         yield return new WaitForSeconds(hitTime);
         Debug.Log("QTE FAILED! (OUT OF TIME)");
-        EndQTE();
+        EndQTE(false);
     }
 
-    private void EndQTE()
+    private void EndQTE(bool success)
     {
         inQTE = false;
         currentKey = "";
         activeCooldown = cooldown;
+
+        if (success)
+        {
+            currentPopup.GetComponent<Popup>().Success();
+        } else
+        {
+            currentPopup.GetComponent<Popup>().Fail();
+        }
     }
 }

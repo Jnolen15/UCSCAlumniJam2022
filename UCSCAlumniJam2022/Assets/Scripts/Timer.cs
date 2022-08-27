@@ -30,7 +30,6 @@ public class Timer : MonoBehaviour
             timeLapse += Time.deltaTime;
 
         }
-        Debug.Log(timeLapse);
-
+        //Debug.Log(timeLapse);
     }
 }
