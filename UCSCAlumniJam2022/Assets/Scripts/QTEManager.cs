@@ -14,6 +14,7 @@ public class QTEManager : MonoBehaviour
     public float cooldown;
     public float hitTime;
     [Header("Changing values")]
+    public bool gameStarted = false;
     public bool inQTE = false;
     public string currentKey;
     public float activeCooldown;
@@ -28,7 +29,7 @@ public class QTEManager : MonoBehaviour
 
     void Update()
     {
-        if (timer.timeLapse < timer.endTime)
+        if (timer.timeLapse < timer.endTime && gameStarted)
         {
             // Game gets faster over time
             float temp = ((timer.endTime - timer.timeLapse) / 10);
