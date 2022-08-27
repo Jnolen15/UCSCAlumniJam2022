@@ -15,47 +15,26 @@ public class Popup : MonoBehaviour
 
     public void Success()
     {
-        StartCoroutine(AnimateSuccess());
+        Vector2 endPos = new Vector2(transform.position.x, transform.position.y + 2);
+        Color endCol = Color.green;
+        StartCoroutine(Animate(endPos, endCol));
     }
 
     public void Fail()
     {
-        StartCoroutine(AnimateFailure());
-    }
-
-    IEnumerator AnimateSuccess()
-    {
-        float time = 0;
-        float total = 0.5f;
-
-        Vector2 startPos = transform.position;
-        Vector2 endPos = new Vector2(transform.position.x, transform.position.y + 2);
-
-        Color startCol = Color.white;
-        Color endCol = Color.green;
-
-        while (time < total)
-        {
-            transform.position = Vector3.Lerp(startPos, endPos, time / total);
-            sprite.color = Color.Lerp(startCol, endCol, time / total);
-
-            time += Time.deltaTime;
-            yield return null;
-        }
-
-        Destroy(this.gameObject);
-    }
-
-    IEnumerator AnimateFailure()
-    {
-        float time = 0;
-        float total = 0.5f;
-
-        Vector2 startPos = transform.position;
         Vector2 endPos = new Vector2(transform.position.x, transform.position.y - 2);
+        Color endCol = Color.red;
+        StartCoroutine(Animate(endPos, endCol));
+    }
+
+    IEnumerator Animate(Vector2 endPos, Color endCol)
+    {
+        float time = 0;
+        float total = 0.5f;
+
+        Vector2 startPos = transform.position;
 
         Color startCol = Color.white;
-        Color endCol = Color.red;
 
         while (time < total)
         {

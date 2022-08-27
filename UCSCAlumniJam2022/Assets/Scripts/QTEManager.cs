@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class QTEManager : MonoBehaviour
 {
-    [Header ("Variables")]
+    [Header("Variables")]
+    public ScoreKeeper score;
     public GameObject popUp;
     public GameObject leftHand;
     public GameObject rightHand;
@@ -78,11 +79,13 @@ public class QTEManager : MonoBehaviour
         if(key == currentKey)
         {
             StopCoroutine(qte);
+            score.UpdateAccuracy(true);
             Debug.Log("QTE SUCCESS!");
             EndQTE(true);
         } else
         {
             StopCoroutine(qte);
+            score.UpdateAccuracy(false);
             Debug.Log("QTE FAILED! (Wrong Key)");
             EndQTE(false);
         }
@@ -92,6 +95,7 @@ public class QTEManager : MonoBehaviour
     IEnumerator RunQTE()
     {
         yield return new WaitForSeconds(hitTime);
+        score.UpdateAccuracy(false);
         Debug.Log("QTE FAILED! (OUT OF TIME)");
         EndQTE(false);
     }
