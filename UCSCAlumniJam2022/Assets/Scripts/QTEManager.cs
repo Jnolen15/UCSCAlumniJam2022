@@ -13,6 +13,10 @@ public class QTEManager : MonoBehaviour
     public string[] keys = {"a", "s", "d", "j", "k", "l"};
     public float cooldown;
     public float hitTime;
+    public float numberOfMissesRight = 0;
+    public float numberOfMissesLeft = 0;
+    public int missCounter = 0;
+    public int chooseHand = 0;
     [Header("Changing values")]
     public bool gameStarted = false;
     public bool inQTE = false;
@@ -53,9 +57,15 @@ public class QTEManager : MonoBehaviour
 
                 Vector2 pos = Vector2.zero; // Spawn QTE Popup
                 if (currentKey == "a" || currentKey == "s" || currentKey == "d")
+                {
                     pos = new Vector2(leftHand.transform.position.x + Random.Range(-1, 1), leftHand.transform.position.y - 2);
+                    chooseHand = 0;
+                }
                 else if (currentKey == "j" || currentKey == "k" || currentKey == "l")
+                {
                     pos = new Vector2(rightHand.transform.position.x + Random.Range(-1, 1), rightHand.transform.position.y - 2);
+                    chooseHand = 1;
+                }
                 currentPopup = Instantiate(popUp, pos, transform.rotation);
                 currentPopup.GetComponent<Popup>().SetUp(currentKey);
 
@@ -87,6 +97,24 @@ public class QTEManager : MonoBehaviour
         {
             StopCoroutine(qte);
             score.UpdateAccuracy(false);
+            if (chooseHand == 0)
+            {
+                if (missCounter < 6)
+                {
+                    missCounter += 1;
+                }
+                    numberOfMissesLeft = Mathf.Clamp(0.25f * missCounter, 0, 1.7f);
+                
+            }
+            else
+            {
+                if (missCounter < 6)
+                {
+                    missCounter += 1;
+                }
+                numberOfMissesRight = Mathf.Clamp(-0.25f * missCounter, -1.7f, 0);
+            }
+
             Debug.Log("QTE FAILED! (Wrong Key)");
             EndQTE(false);
         }
@@ -98,6 +126,24 @@ public class QTEManager : MonoBehaviour
         yield return new WaitForSeconds(hitTime);
         score.UpdateAccuracy(false);
         Debug.Log("QTE FAILED! (OUT OF TIME)");
+
+        if (chooseHand == 0) //Left Hand
+        {
+            if (missCounter < 6)
+            {
+                missCounter += 1;
+            }
+            numberOfMissesLeft = Mathf.Clamp(0.25f * missCounter, 0, 1.7f);
+
+        }
+        else //Right Hand
+        {
+            if (missCounter < 6)
+            {
+                missCounter += 1;
+            }
+            numberOfMissesRight = Mathf.Clamp(-0.25f * missCounter, -1.7f, 0);
+        }
         EndQTE(false);
     }
 

@@ -5,10 +5,14 @@ using UnityEngine;
 public class Menu : MonoBehaviour
 {
     public GameObject playButton;
+    public GameObject percentage;
 
     public QTEManager qte;
     public Timer leftHand;
     public Timer rightHand;
+    public AudioClip music;
+    public AudioSource musicPlayer;
+    public AudioSource menuPlayer;
 
     public void StartGame()
     {
@@ -17,5 +21,9 @@ public class Menu : MonoBehaviour
         rightHand.gameStarted = true;
 
         playButton.SetActive(false);
+        percentage.SetActive(true);
+        musicPlayer.PlayOneShot(music);
+        menuPlayer.mute = true;
+
     }
 }

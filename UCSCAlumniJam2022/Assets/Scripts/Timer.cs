@@ -8,7 +8,10 @@ public class Timer : MonoBehaviour
     // Public Variables
     public float endTime = 60f;
     public float timeLapse;
+    public float degradingMissTimer;
     public Transform endSpot;
+    public QTEManager QTEManager;
+    public float counterOfMisses;
     public float animateSpotX;
     public float valueToLerp;
     public float missQTEMove;
@@ -17,6 +20,7 @@ public class Timer : MonoBehaviour
     //Private Variables
     private Vector3 startingPosition;
     private float changingX;
+    private float changingY;
     private bool isClosing = false;
 
     void Start()
@@ -31,6 +35,29 @@ public class Timer : MonoBehaviour
         {
             if (timeLapse < endTime)
             {
+                degradingMissTimer += Time.deltaTime;
+                if (gameObject.tag == "Left Hand")
+                {
+                    missQTEMove = QTEManager.numberOfMissesLeft;
+                    if(missQTEMove > 0)
+                    {
+                        missQTEMove = QTEManager.numberOfMissesLeft - (1f * degradingMissTimer/endTime);
+
+                    }
+                    
+
+                }
+                
+                if (gameObject.tag == "Right Hand")
+                {
+                    missQTEMove = QTEManager.numberOfMissesRight;
+                    if (missQTEMove < 0)
+                    {
+                        missQTEMove = QTEManager.numberOfMissesRight + (1f * degradingMissTimer / endTime);
+
+                    }
+                }
+                
                 changingX = Mathf.Lerp(startingPosition.x, endSpot.position.x, timeLapse / endTime);
                 transform.position = new Vector3(changingX, missQTEMove, 0);
                 timeLapse += Time.deltaTime;
@@ -43,7 +70,6 @@ public class Timer : MonoBehaviour
             }
         }
     }
-
     IEnumerator AnimateClose()
     {
         float timerOne = 0;
