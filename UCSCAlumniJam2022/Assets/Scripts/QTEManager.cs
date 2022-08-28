@@ -36,15 +36,15 @@ public class QTEManager : MonoBehaviour
         if (timer.timeLapse < timer.endTime && gameStarted)
         {
             // Game gets faster over time
-            float temp = ((timer.endTime - timer.timeLapse) / 10);
+            float temp = ((timer.endTime - timer.timeLapse) / 14);
             if (temp > 1)
             {
                 cooldown = temp;
                 hitTime = temp / 2;
             } else
             {
-                cooldown = 1;
-                hitTime = 0.5f;
+                cooldown = 1.5f;
+                hitTime = 1f;
             }
 
             // QTE spawn timer
