@@ -11,6 +11,7 @@ public class Timer : MonoBehaviour
     public float degradingMissTimer;
     public Transform endSpot;
     public QTEManager QTEManager;
+    public GameObject restartButton;
     public float counterOfMisses;
     public float animateSpotX;
     public float valueToLerp;
@@ -103,5 +104,6 @@ public class Timer : MonoBehaviour
             timertwo += Time.deltaTime;
             yield return null;
         }
+        restartButton.SetActive(true);
     }
 }
