@@ -7,6 +7,7 @@ public class QTEManager : MonoBehaviour
     [Header("Variables")]
     public ScoreKeeper score;
     public GameObject popUp;
+    public GameObject badPopUp;
     public GameObject leftHand;
     public GameObject rightHand;
     public Timer timer;
@@ -17,6 +18,7 @@ public class QTEManager : MonoBehaviour
     public float numberOfMissesLeft = 0;
     public int missCounter = 0;
     public int chooseHand = 0;
+    public bool extremeMode = false;
     [Header("Changing values")]
     public bool gameStarted = false;
     public bool inQTE = false;
@@ -25,6 +27,7 @@ public class QTEManager : MonoBehaviour
 
     private Coroutine qte;
     private GameObject currentPopup;
+    private GameObject currentBadPopup;
 
     void Start()
     {
@@ -36,15 +39,32 @@ public class QTEManager : MonoBehaviour
         if (timer.timeLapse < timer.endTime && gameStarted)
         {
             // Game gets faster over time
-            float temp = ((timer.endTime - timer.timeLapse) / 14);
-            if (temp > 1)
+            if (extremeMode)
             {
-                cooldown = temp;
-                hitTime = temp / 2;
+                float temp = ((timer.endTime - timer.timeLapse) / 20);
+                if (temp > 1.5)
+                {
+                    cooldown = temp;
+                    hitTime = temp / 2;
+                }
+                else
+                {
+                    cooldown = 1f;
+                    hitTime = 0.75f;
+                }
             } else
             {
-                cooldown = 1.5f;
-                hitTime = 1f;
+                float temp = ((timer.endTime - timer.timeLapse) / 14);
+                if (temp > 2.4)
+                {
+                    cooldown = temp;
+                    hitTime = temp / 2;
+                }
+                else
+                {
+                    cooldown = 2.4f;
+                    hitTime = 1.2f;
+                }
             }
 
             // QTE spawn timer
@@ -56,18 +76,27 @@ public class QTEManager : MonoBehaviour
                 currentKey = SelectKey(); // Get random Key
 
                 Vector2 pos = Vector2.zero; // Spawn QTE Popup
+                Vector2 otherpos = Vector2.zero; // Spawn Bad QTE Popup
                 if (currentKey == "a" || currentKey == "s" || currentKey == "d")
                 {
                     pos = new Vector2(leftHand.transform.position.x + Random.Range(-1, 1), leftHand.transform.position.y - 2);
+                    otherpos = new Vector2(rightHand.transform.position.x + Random.Range(-1, 1), rightHand.transform.position.y - 2);
                     chooseHand = 0;
                 }
                 else if (currentKey == "j" || currentKey == "k" || currentKey == "l")
                 {
                     pos = new Vector2(rightHand.transform.position.x + Random.Range(-1, 1), rightHand.transform.position.y - 2);
+                    otherpos = new Vector2(leftHand.transform.position.x + Random.Range(-1, 1), leftHand.transform.position.y - 2);
                     chooseHand = 1;
                 }
                 currentPopup = Instantiate(popUp, pos, transform.rotation);
                 currentPopup.GetComponent<Popup>().SetUp(currentKey);
+
+                if (extremeMode) // Spawn fake popups in Extreme mode
+                {
+                    currentBadPopup = Instantiate(badPopUp, otherpos, transform.rotation);
+                    currentBadPopup.GetComponent<Popup>().SetUp(SelectKey());
+                }
 
                 qte = StartCoroutine(RunQTE()); // Start QTE timer
             }
@@ -156,9 +185,11 @@ public class QTEManager : MonoBehaviour
         if (success)
         {
             currentPopup.GetComponent<Popup>().Success();
+            if (extremeMode) currentBadPopup.GetComponent<Popup>().Success();
         } else
         {
             currentPopup.GetComponent<Popup>().Fail();
+            if (extremeMode) currentBadPopup.GetComponent<Popup>().Fail();
         }
     }
 }

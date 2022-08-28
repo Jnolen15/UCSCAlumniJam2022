@@ -9,6 +9,7 @@ public class Menu : MonoBehaviour
     public GameObject mainMenu;
     public GameObject playButton;
     public GameObject percentage;
+    public GameObject extremeDecor;
 
     public QTEManager qte;
     public Timer leftHand;
@@ -33,5 +34,19 @@ public class Menu : MonoBehaviour
     public void RestartGame()
     {
         SceneManager.LoadScene("GameScene");
+    }
+
+    public void ExtremeMode()
+    {
+        if (!qte.extremeMode)
+        {
+            qte.extremeMode = true;
+            extremeDecor.SetActive(true);
+        }
+        else
+        {
+            qte.extremeMode = false;
+            extremeDecor.SetActive(false);
+        }
     }
 }
