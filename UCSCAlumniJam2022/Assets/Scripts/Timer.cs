@@ -28,7 +28,6 @@ public class Timer : MonoBehaviour
         startingPosition = transform.position;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (gameStarted)

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Menu : MonoBehaviour
 {
+    public GameObject mainMenu;
     public GameObject playButton;
     public GameObject percentage;
 
@@ -20,7 +21,7 @@ public class Menu : MonoBehaviour
         leftHand.gameStarted = true;
         rightHand.gameStarted = true;
 
-        playButton.SetActive(false);
+        mainMenu.SetActive(false);
         percentage.SetActive(true);
         musicPlayer.PlayOneShot(music);
         menuPlayer.mute = true;
