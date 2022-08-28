@@ -34,13 +34,14 @@ public class Timer : MonoBehaviour
         {
             if (timeLapse < endTime)
             {
-                degradingMissTimer += Time.deltaTime;
+                
                 if (gameObject.tag == "Left Hand")
                 {
                     missQTEMove = QTEManager.numberOfMissesLeft;
                     if(missQTEMove > 0)
                     {
                         missQTEMove = QTEManager.numberOfMissesLeft - (1f * degradingMissTimer/endTime);
+                        degradingMissTimer += Time.deltaTime;
 
                     }
                     
@@ -53,6 +54,7 @@ public class Timer : MonoBehaviour
                     if (missQTEMove < 0)
                     {
                         missQTEMove = QTEManager.numberOfMissesRight + (1f * degradingMissTimer / endTime);
+                        degradingMissTimer += Time.deltaTime;
 
                     }
                 }
